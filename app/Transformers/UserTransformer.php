@@ -6,13 +6,13 @@ use App\User;
 use App\Transformers\AbsenTransformer;
 use League\Fractal\TransformerAbstract;
 
-class UserTransfornmer extends TransformerAbstract
+class UserTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
         'absen'
     ];
 
-    public function transform()
+    public function transform(User $user)
     {
         return [
             'id' => $user->id,

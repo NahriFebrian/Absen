@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Absen;
+use App\Status;
 
 class User extends Authenticatable
 {
@@ -16,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'id', 'nama', 'username', 'email',
     ];
 
     /**
@@ -36,4 +38,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function Absen()
+    {
+        return $this->hasMany(Absen::class);
+    }
+
+    public function Status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    public function onwsAbsen(Absen $absen)
+    {
+        return auth()->id() === $absen->user->id;
+    }
+
+    public function ownsStatus(Status $status)
+    {
+        return auth()->id() === $status->user->id;
+    }
 }
