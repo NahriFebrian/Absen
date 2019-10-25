@@ -47,14 +47,14 @@ class StatusController extends Controller
     public function add(Request $request,Status $status)
     {
         $this->validate($request,[
-            'judul' => 'required',
-            'penulis' => 'required'
+            'id' => 'required',
+            'nama' => 'required'
         ]);
 
         $status = $status->create([
-            'judul' => $request->judul,
-            'penulis' => $request->penulis,
-            'user_id' => Auth::user()->id
+            'id' => $request->id,
+            'nama' => $request->penulis,
+            // 'user_id' => Auth::user()->id
         ]);
 
         $response = fractal()
