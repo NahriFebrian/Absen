@@ -19,6 +19,7 @@ class AuthController extends Controller
             'name' => 'required',
             'username' => 'required',
             'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
 
         ]);
 
@@ -26,6 +27,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
+            'password' => bcrypt($request->password),
             'api_token' => bcrypt($request->email)
         ]);
 
@@ -42,7 +44,7 @@ class AuthController extends Controller
 
     public function login(Request $request,User $user)
     {
-        if(!Auth::attempt(['email' => $request->email,'password' => $request->password])){
+        if(!Auth::attempt(['name' => $request->name,'username' => $request->username,'email' => $request->email,'password' => $request->password])){
             return response()->json(['error' => 'Your credential is wrong'],401);
         }
 
