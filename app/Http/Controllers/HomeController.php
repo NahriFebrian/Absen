@@ -22,14 +22,39 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function timeZone($location){
+        return date_default_timezone_set($location);
+    }
     public function index()
     {
+        $this->timeZone('Asia/Jakarta');
         $user_id = Auth::user()->id;
+        $date = date("Y-m-d");
+        $cek_absen = Absen::where(['user_id' => $user_id, 'date' => $date])
+                        ->get()
+                        ->first();
+        if (is_null($cek_absen)) {
+            $info = array(
+                "status" => "Anda belum mengisi absensi!",
+                "btnIn" => "",
+                "btnOut" => "disabled");
+        } elseif ($cek_absen->time_out == NULL) {
+            $info = array(
+                "status" => "Jangan lupa absen keluar!",
+                "btnIn" => "disabled",
+                "btnOut" => "");
+        } else{
+             $info = array(
+                "status" => "Absensi hari ini telah selesai!",
+                "btnIn" => "disabled",
+                "btnOut" => "disabled");
+        }
         $data_absen = Absen::where('user_id', $user_id)
-                        -> paginate(50);
-        return view('home', compact('data_absen'));
+                        -> paginate(20);
+        return view('home', compact('data_absen', 'info'));
     }
     public function absen(Request $request){
+        $this->timeZone('Asia/Jakarta');
         $user_id = Auth::user()->id;
         $date = date("Y-m-d");
         $time = date("H:i:s");
@@ -38,6 +63,12 @@ class HomeController extends Controller
         $absen = new Absen;
         // absen masuk
         if ($request->has('btnIn')) {
+            // cek double data
+            $cek_double = $absen->where(['date' => $date, 'user_id' => $user_id])
+                                ->count();
+            if ($cek_double > 0) {
+                return redirect()->back();
+            }
             $absen->create([
                 'user_id' => $user_id,
                 'date' => $date,

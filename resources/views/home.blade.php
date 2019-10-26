@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Informasi</div>
+                <div class="card-header">{{ $info['status']}}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -22,10 +22,10 @@
                                     <input type="text" name="note" name="form-control" placeholder="Keterangan..." name="note">
                                 </td>
                                 <td>
-                                    <button type="submit" class="btn btn-flat btn-primary" name="btnIn">ABSEN MASUK</button>
+                                    <button type="submit" class="btn btn-flat btn-primary" name="btnIn" {{$info['btnIn']}}>ABSEN MASUK</button>
                                 </td>
                                 <td>
-                                    <button type="submit" class="btn btn-flat btn-primary" name="btnOut">ABSEN KELUAR</button>
+                                    <button type="submit" class="btn btn-flat btn-primary" name="btnOut" {{$info['btnOut']}}>ABSEN KELUAR</button>
                                 </td>
                             </tr>
                         </table>
@@ -71,6 +71,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {!! $data_absen->links() !!}
                 </div>
             </div>
         </div>
