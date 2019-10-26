@@ -8,17 +8,8 @@ use App\Absen;
 
 class Absen extends Model
 {
+    protected $table = 'absen';
     protected $fillable = [
-        'id','user_id','status','keterangan',
+        'user_id', 'date', 'time_in', 'time_out', 'note'
     ];
-
-    public function scopeLatestFirst($query)
-    {
-        return $query->orderBy('id','DESC');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }
