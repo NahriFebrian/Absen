@@ -12,7 +12,7 @@ class Absen extends Model
     protected $table = 'absen';
 
     protected $fillable = [
-        'id','user_id','status_id',
+        'id','user_id','status_id','date','nama', 'email', 'time_in', 'time_out', 'note'
     ];
 
     public function scopeLatestFirst($query)
