@@ -72,6 +72,8 @@ class HomeController extends Controller
             $absen->create([
                 'user_id' => $user_id,
                 'date' => $date,
+                'nama' => Auth::user()->name,
+                'email' => Auth::user()->email,
                 'time_in' => $time,
                 'note' => $note]);
             return redirect()->back();
@@ -85,5 +87,54 @@ class HomeController extends Controller
                         'note' => $note]);
              return redirect()->back();
         }
+    }
+
+    public function create(Request $request)
+    {
+        \App\Siswa::create($request->all());
+        return redirect('/absen')->with('sukses', 'Data Absensi Berhasil Ditambahkan!!');
+    }
+
+    public function store(Request $request){
+        $this->timeZone('Asia/Jakarta');
+        $user_id = Auth::user()->id;
+        
+        $absen = new Absen;
+            $absen->create([
+                'user_id' => $user_id,
+                'date' => $request->tanggal,
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'time_in' => $request->jam_masuk,
+                'time_out' => $request->jam_keluar,
+                'note' => $request->note]);
+            return redirect('/home');
+    }
+
+    public function edit($id)
+    {
+        $absen = \App\Absen::find($id);
+        return view('edit', ['absen' => $absen]);
+    }
+    public function update(Request $request, $id)
+    {
+        $user_id = Auth::user()->id;
+        $absen = \App\Absen::find($id);
+        $absen->update([
+            'user_id' => $user_id,
+            'date' => $request->tanggal,
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'time_in' => $request->jam_masuk,
+            'time_out' => $request->jam_keluar,
+            'note' => $request->note
+        ]);
+        return redirect('/home')->with('sukses', 'Data Absensi Berhasil Diubah!!');
+    }
+    public function delete($id)
+    {
+        $absen = \App\Absen::find($id);
+        $absen->delete($absen);
+        return redirect('/home')->with('sukses', 'Data Absensi Berhasil Dihapus!!');
     }
 }

@@ -10,6 +10,6 @@ class Absen extends Model
 {
     protected $table = 'absen';
     protected $fillable = [
-        'user_id', 'date', 'time_in', 'time_out', 'note'
+        'user_id', 'date', 'nama', 'email', 'time_in', 'time_out', 'note'
     ];
 }
