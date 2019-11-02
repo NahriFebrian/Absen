@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Transformers\BookTransformer;
-use App\Book;
+use App\Transformers\StatusTransformer;
+use App\Status;
 use Auth;
 use App\Http\Controllers\Controller;
 
@@ -29,7 +29,7 @@ class StatusController extends Controller
         return fractal()
             ->item($status)
             ->transformWith(new StatusTransformer)
-            ->includeposts()
+            ->includeStatus()
             ->toArray();
     }
 
@@ -40,20 +40,18 @@ class StatusController extends Controller
         return fractal()
             ->item($status)
             ->transformWith(new StatusTransformer)
-            ->includeposts()
+            ->includeStatus()
             ->toArray();
     }
 
     public function add(Request $request,Status $status)
     {
         $this->validate($request,[
-            'id' => 'required',
-            'nama' => 'required'
+            'keterangan' => 'required'
         ]);
 
         $status = $status->create([
-            'id' => $request->id,
-            'nama' => $request->penulis,
+            'keterangan' => $request->keterangan,
             // 'user_id' => Auth::user()->id
         ]);
 
@@ -68,10 +66,10 @@ class StatusController extends Controller
     public function update(Request $request,Status $status)
     {
         $this->authorize('update', $status);
-
-        $status->id = $request->get('id', $status->id);
-        $status->nama = $request->get('nama',$status->nama);
+        
+        $status = $status->fill($request->all());
         $status->save();
+
 
         return fractal()
             ->item($status)
@@ -81,7 +79,6 @@ class StatusController extends Controller
 
     public function delete(Status $status)
     {
-        $this->authorize('delete',$status);
 
         $status->delete();
 

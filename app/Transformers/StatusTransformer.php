@@ -12,18 +12,18 @@ class StatusTransformer extends TransformerAbstract
         'status'
     ];
 
-    public function transform()
+    public function transform( $status)
     {
         return [
-            'id' => $book->id,
-            'name' => $book->name,
+            'id' => $status->id,
+            'keterangan' => $status->keterangan,
         ];
     }
 
-    public function includePosts(Status $status)
+    public function includeStatus(Status $status)
     {
         $status  = $status->status()->latestFirst()->get();
 
-        return $this->collection($status,new BookTransformer);
+        return $this->collection($status,new StatusTransformer);
     }
 }

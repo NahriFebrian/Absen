@@ -27,7 +27,7 @@ class UserController extends Controller
         return fractal()
             ->item($user)
             ->transformWith(new UserTransformer())
-            ->includepost()
+            ->includeabsen()
             ->toArray();
     }
 
@@ -38,7 +38,7 @@ class UserController extends Controller
         return fractal()
             ->item($user)
             ->transformWith(new UserTransformer)
-            ->includepost()
+            ->includeabsen()
             ->toArray();
     }
 }

@@ -5,27 +5,44 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Post;
+use App\Absen;
 use App\Transformers\AbsenTransformer;
 use Auth; 
 use App\Http\Controllers\Controller;
 
 class AbsenController extends Controller
 {
+    public function profileById(Absen $absen,$id)
+    {
+        $absen = $absen->find($id);
+
+        return fractal()
+            ->item($absen)
+            ->transformWith(new AbsenTransformer)
+            ->includestatus()
+            ->addMeta([
+                'status' => $absen->status->keterangan,
+            ])
+            ->toArray();
+    }
+
     public function add(Request $request,Absen $absen)
     {
         $this->validate($request,[
-            'content' => 'required|min:10',
+            'keterangan' => 'required',
         ]);
 
         $absen = $absen->create([
             'user_id' => Auth::user()->id,
-            'content' => $request->content,
+            'status_id' => $request->keterangan,
         ]);
 
         $response = fractal()
             ->item($absen)
             ->transformWith(new AbsenTransformer)
+            ->addMeta([
+                'status' => $absen->status->keterangan,
+            ])
             ->toArray();
 
         return response()->json($response, 201);
@@ -35,7 +52,7 @@ class AbsenController extends Controller
     {
         $this->authorize('update',$absen);
 
-        $absen->content = $request->get('content', $absen->content);
+        $absen = $absen->fill($request->all());
         $absen->save();
 
         return fractal()

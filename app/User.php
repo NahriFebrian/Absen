@@ -49,13 +49,13 @@ class User extends Authenticatable
         return $this->belongsTo(Status::class);
     }
 
-    public function onwsAbsen(Absen $absen)
+    public function ownsAbsen(Absen $absen)
     {
         return auth()->id() === $absen->user->id;
     }
 
     public function ownsStatus(Status $status)
     {
-        return auth()->id() === $status->user->id;
+        return auth()->id() === $status->id;
     }
 }

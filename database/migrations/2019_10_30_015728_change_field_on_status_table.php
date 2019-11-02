@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAbsenTable extends Migration
+class ChangeFieldOnStatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateAbsenTable extends Migration
      */
     public function up()
     {
-        Schema::create('absen', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
-            $table->string('keterangan');
-            $table->timestamps();
+        Schema::table('status', function(Blueprint $table) {
+            $table->renameColumn('nama', 'keterangan');
         });
     }
 
@@ -28,6 +25,9 @@ class CreateAbsenTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('absen');
+        Schema::table('status', function(Blueprint $table) {
+            $table->renameColumn('keterangan', 'nama');
+        });
+        
     }
 }

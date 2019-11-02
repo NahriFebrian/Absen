@@ -23,9 +23,9 @@ class UserTransformer extends TransformerAbstract
         ];
     }
 
-    public function includePosts(User $user)
+    public function includeAbsen(User $user)
     {
-        $posts  = $user->posts()->latestFirst()->get();
+        $absen  = $user->absen()->latestFirst()->get();
 
         return $this->collection($absen,new AbsenTransformer);
     }

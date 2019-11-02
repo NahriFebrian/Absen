@@ -13,7 +13,12 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        \Illuminate\Auth\AuthenticationException::class,
+        \Illuminate\Auth\Access\AuthenticationException::class,
+        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+        \Illuminate\Session\TokenMismatchException::class,
+        \Illuminate\Validation\ValidationException::class,
     ];
 
     /**
@@ -46,6 +51,37 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($request->expectsjson()) {
+            if ($exception instanceof \Illuminate\Auth\Access\AuthorizedException) {
+                return response()->json([
+                    'error' => 'Unauthorized'
+                ], 401);
+            }
+
+            if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+                return response()->json([
+                    'error' => 'Not Found'
+                ], 404);
+            }
+
+            if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                $modelClass = explode('\\', $exception->getModel());
+
+                return response()->json([
+                    'error' => end($modelClass) . ' Not Found',
+                ], 404);
+            }
+        }
+
         return parent::render($request, $exception);
+    }
+
+    protected function unathenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsjson()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return redirect()->guest('login');
     }
 }
