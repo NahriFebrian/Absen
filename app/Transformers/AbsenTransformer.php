@@ -14,6 +14,11 @@ class AbsenTransformer extends TransformerAbstract
             'id'             =>  $absen->id,
             'user_id'        =>  $absen->user_id,
             'status_id'         =>  $absen->status_id,
+            'date'         =>  $absen->date,
+            'nama'         =>  $absen->nama,
+            'email'         =>  $absen->email,
+            'time_in'         =>  $absen->time_in,
+            'time_out'         =>  $absen->time_out,
        ];
     }
 

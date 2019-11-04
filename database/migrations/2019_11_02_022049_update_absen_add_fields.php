@@ -17,8 +17,8 @@ class UpdateAbsenAddFields extends Migration
             $table->date('date')->after('status_id');
             $table->string('nama')->after('date');
             $table->string('email')->after('nama');
-            $table->time('time_in')->after('email');
-            $table->time('time_out')->after('time_in');
+            $table->time('time_in')->nullable()->after('email');
+            $table->time('time_out')->nullable()->after('time_in');
         });
     }
 

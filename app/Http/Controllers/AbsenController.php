@@ -12,6 +12,10 @@ use App\Http\Controllers\Controller;
 
 class AbsenController extends Controller
 {
+    public function timeZone($location){
+        return date_default_timezone_set($location);
+    }
+
     public function profileById(Absen $absen,$id)
     {
         $absen = $absen->find($id);
@@ -30,11 +34,23 @@ class AbsenController extends Controller
     {
         $this->validate($request,[
             'keterangan' => 'required',
+            'nama' => 'required',
         ]);
+
+        
+        $this->timeZone('Asia/Jakarta');
+        $date = date("Y-m-d");
+        $time = date("H:i:s");
+        
 
         $absen = $absen->create([
             'user_id' => Auth::user()->id,
             'status_id' => $request->keterangan,
+            'date'         =>  $date,
+            'nama'         =>  $request->nama,
+            'email'         =>  $request->email,
+            'time_in'         =>  $time,
+            'time_out'         =>  $request->time_out,
         ]);
 
         $response = fractal()

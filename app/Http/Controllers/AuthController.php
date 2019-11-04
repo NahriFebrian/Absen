@@ -9,7 +9,6 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Transformers\UserTransformer;
 use Auth;
-use App\Status;
 
 class AuthController extends Controller
 {
