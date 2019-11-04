@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Absen;
+use App\Status;
 use Auth;
 class HomeController extends Controller
 {
@@ -51,7 +52,9 @@ class HomeController extends Controller
         }
         $data_absen = Absen::where('user_id', $user_id)
                         -> paginate(20);
-        return view('home', compact('data_absen', 'info'));
+
+        $status = Status::select('id', 'keterangan')->get();
+        return view('home', compact('data_absen', 'info', 'status'));
     }
     public function absen(Request $request){
         $this->timeZone('Asia/Jakarta');
@@ -71,9 +74,10 @@ class HomeController extends Controller
             }
             $absen->create([
                 'user_id' => $user_id,
+                'status_id' => $request->note,
                 'date' => $date,
-                'nama' => Auth::user()->name,
-                'email' => Auth::user()->email,
+                // 'nama' => Auth::user()->name,
+                // 'email' => Auth::user()->email,
                 'time_in' => $time,
                 'note' => $note]);
             return redirect()->back();
@@ -102,12 +106,13 @@ class HomeController extends Controller
         $absen = new Absen;
             $absen->create([
                 'user_id' => $user_id,
+                'status_id' => $request->note,
                 'date' => $request->tanggal,
-                'nama' => $request->nama,
-                'email' => $request->email,
+                // 'nama' => $request->nama,
+                // 'email' => $request->email,
                 'time_in' => $request->jam_masuk,
                 'time_out' => $request->jam_keluar,
-                'note' => $request->note]);
+            ]);
             return redirect('/home');
     }
 
@@ -122,9 +127,10 @@ class HomeController extends Controller
         $absen = \App\Absen::find($id);
         $absen->update([
             'user_id' => $user_id,
+            'status_id' => $request->note,
             'date' => $request->tanggal,
-            'nama' => $request->nama,
-            'email' => $request->email,
+            // 'nama' => $request->nama,
+            // 'email' => $request->email,
             'time_in' => $request->jam_masuk,
             'time_out' => $request->jam_keluar,
             'note' => $request->note

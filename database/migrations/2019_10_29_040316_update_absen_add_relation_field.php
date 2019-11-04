@@ -18,7 +18,7 @@ class UpdateAbsenAddRelationField extends Migration
 
     public function down()
     {
-        Schema::table('absen',function(Blueprint $table){
+        Schema::table('absen' ,function(Blueprint $table){
             $table->dropForeign('user_id');
             $table->dropForeign('status_id');
             $table->dropColumn('status_id');
