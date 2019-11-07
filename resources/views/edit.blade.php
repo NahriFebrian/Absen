@@ -15,14 +15,6 @@
                     <input name="tanggal" value="{{ $absen->date}}" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="2019-01-01">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Nama</label>
-                    <input name="nama" value="{{ $absen->nama}}" type="text" class="form-control" id="exampleInputPassword1" placeholder="Nama">
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect">Email</label>
-                    <input name="email" value="{{ $absen->email}}" type="text" class="form-control" id="exampleInputPassword1" placeholder="aa@gmail.com">
-                </div>
-                <div class="form-group">
                     <label for="exampleInputPassword1">Jam Masuk</label>
                     <input name="jam_masuk" value="{{ $absen->time_in}}" type="text" class="form-control" id="exampleInputPassword1" placeholder="17:20:56">
                 </div>
@@ -31,13 +23,11 @@
                     <input name="jam_keluar" value="{{ $absen->time_out}}" type="text" class="form-control" id="exampleInputPassword1" placeholder="17:20:56">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Keterangan</label>
-                    <select class="form-control" id="note" name="note" value="{{ $absen->note}}">
-                        <option value="Hadir">Hadir</option>
-                        <option value="Alpa">Alpa</option>
-                        <option value="Sakit">Sakit</option>
-                        <option value="Ijin">Ijin</option>               
-                        <option value="Lembur">Lembur</option>               
+                     <label for="exampleInputPassword1">Keterangan</label>
+                    <select class="form-control" id="note" name="note">
+                        @foreach($status as $data)
+                            <option value="{{ $data->id }}">{{ $data->keterangan }}</option>
+                        @endforeach             
                     </select>
                 </div>
             </div>
